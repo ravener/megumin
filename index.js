@@ -156,7 +156,8 @@ client.on("message", async(msg) => {
     const role = msg.guild.roles.cache.get(args[0]);
     if(!role) return msg.channel.send("Role not found.");
     client.roles[args.slice(1).join(" ").toLowerCase()] = role.id;
-    return writeFile("./roles.json", JSON.stringify(client.roles));
+    await writeFile("./roles.json", JSON.stringify(client.roles));
+    return msg.channel.send(`Added the role \`${role.name}\` (${role.id}) to the list of self assignable roles.`);
   }
 
   if(command === "reboot" && msg.isOwner) {
