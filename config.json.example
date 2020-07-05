@@ -1,0 +1,6 @@
+{
+  "token": "Bot token.",
+  "owner": "Owner ID",
+  "modlogs": "Modlogs channel ID.",
+  "prefix": "s!"
+}

@@ -1,0 +1,33 @@
+{
+  "name": "sakura",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Discord Bot for Sakura Cafe",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ravener/sakura-bot.git"
+  },
+  "keywords": [
+    "discord.js",
+    "discord",
+    "discordapp",
+    "api",
+    "bot",
+    "anime",
+    "cafe",
+    "sakura"
+  ],
+  "author": "Raven <ravener.anime@gmail.com> (https://ravener.now.sh/)",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/ravener/sakura-bot/issues"
+  },
+  "homepage": "https://github.com/ravener/sakura-bot#readme",
+  "dependencies": {
+    "discord.js": "^12.2.0"
+  }
+}
