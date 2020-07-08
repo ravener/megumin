@@ -197,11 +197,15 @@ client.on("message", async(msg) => {
 /// --- Modlogs ---
 
 client.on("messageDelete", (msg) => {
+  const content = msg.content || (msg.embeds.length && msg.embeds[0].description);
+
+  if(!content) return;
+
   return client.modlogs.send(new MessageEmbed()
-    .setTitle("Message Deleted")
+    .setTitle(`Message Deleted in #${msg.channel.name}`)
     .setColor(0xE91E63)
     .setAuthor(msg.member.displayName, msg.author.displayAvatarURL({ size: 64 }))
-    .setDescription(msg.content)
+    .setDescription(content)
     .setTimestamp());
 });
 
