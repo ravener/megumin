@@ -223,7 +223,7 @@ client.on("message", async(msg) => {
     return msg.channel.send([output, outerr].join("\n"));
   }
 
-  if(command === "eval" && msg.isOwner) {
+  if((command === "eval" || command === "ev") && msg.isOwner) {
     try {
       let output = eval(args.join(" "));
 
