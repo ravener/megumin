@@ -101,10 +101,10 @@ client.on("message", async(msg) => {
         "• iam    | Assign a role to yourself.",
         "• iamnot | Remove a role from yourself.",
         "• say    | I'll say anything you want me to."
-      ].join("\n") + "\n```" + (msg.member.isAdmin || msg.isOwner) ? "**Admin Commands**\n```\n" + [
+      ].join("\n") + "\n```" + ((msg.member.isAdmin || msg.isOwner) ? "**Admin Commands**\n```\n" + [
         "• kick   | Kick a user.",
         "• ban    | Bans a user."
-      ].join("\n") + "\n```": ""));
+      ].join("\n") + "\n```": "")));
   }
 
   if(command === "stats") {
