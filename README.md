@@ -21,6 +21,7 @@ Here are the features:
 - Self assignable roles. `iam`/`iamnot` commands. Bot owner can add roles on the fly using the owner command `addrole`
 - View server statistics. `stats` command.
 - Simple modlog to keep track of deleted messages, member leaves/joins, member bans/unbans, role creates/deletes.
+- `kick`/`ban` members.
 
 The feature list can expand anytime with features you might or might not want/like. The primary goal of this bot is for my community but it's here in case it suits you as well.
 

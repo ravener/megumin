@@ -27,6 +27,12 @@ Structures.extend("Message", (Message) => class extends Message {
   }
 });
 
+Structures.extend("GuildMember", (GuildMember) => class extends GuildMember {
+  get isAdmin() {
+    return this.roles.cache.has("728299242480730273");
+  }
+});
+
 // Yes, bad practice and all that but this is a small project so I don't really care.
 String.prototype.toProperCase = function() {
   return this.replace(/([^\W_]+[^\s-]*) */g, txt => txt.charAt(0).toUpperCase() + txt.substr(1).toLowerCase());
@@ -95,7 +101,10 @@ client.on("message", async(msg) => {
         "• iam    | Assign a role to yourself.",
         "• iamnot | Remove a role from yourself.",
         "• say    | I'll say anything you want me to."
-      ].join("\n") + "\n```"));
+      ].join("\n") + "\n```" + (msg.member.isAdmin || msg.isOwner) ? "**Admin Commands**\n```\n" + [
+        "• kick   | Kick a user.",
+        "• ban    | Bans a user."
+      ].join("\n") + "\n```": ""));
   }
 
   if(command === "stats") {
@@ -146,6 +155,45 @@ client.on("message", async(msg) => {
       }
     } catch(err) {
       return msg.channel.send(`There was an error ${add ? "adding" : "removing"} the role ${add ? "to" : "from"} you: ${err.message}`);
+    }
+  }
+
+  /// --- Admin Commands ---
+  if((command === "kick" || command === "ban") && (msg.member.isAdmin || msg.isOwner)) {
+    const member = msg.mentions.members.first() || msg.guild.members.cache.get(args[0]);
+    if(!member) return msg.channel.send(`Usage: \`${prefix}${command} <user> [reason]\``);
+
+    if(member.id === msg.author.id) return msg.reply("Baka! Why would you kick yourself?");
+    if(member.id === client.user.id) return msg.reply("Baka! Why would you kick me?");
+    if(member.id === msg.guild.ownerID) return msg.reply("Baka! You can't kick the owner.");
+
+    if(member.roles.highest.position >= msg.member.roles.highest.position) return msg.reply(`You cannot ${command} this user.`);
+    if(!member[command === "ban" ? "bannable" : "kickable"]) return msg.reply(`I cannot ${command} this user.`);
+
+    const options = {};
+    if(command === "ban") options.days = 7;
+    if(args[1]) options.reason = args.slice(1).join(" ");
+    
+    try {
+      await member[command](options);
+      await msg.channel.send(`${command === "ban" ? "Banned" : "Kicked"} ${member.user.tag} with reason of: \`${options.reason || "None"}\``);
+
+      if(command === "kick") {
+        const days = Math.floor((new Date() - member.user.createdAt) / (1000 * 60 * 60 * 24));
+
+        return client.modlogs.send(new MessageEmbed()
+          .setTitle("Member Kicked")
+          .setColor(0xE91E63)
+          .setDescription([
+            `**ID:** ${member.user.id}`,
+            `**Account Created:** ${member.user.createdAt.toDateString()} (${days} days ago)`,
+            `**Responsible Moderator:** ${msg.author.tag} (${msg.member})`,
+            `**Reason:** ${options.reason || "None"}`
+          ].join("\n"))
+          .setTimestamp());
+      }
+    } catch(err) {
+      return msg.channel.send(`An error occured: ${err.message}`);
     }
   }
 
